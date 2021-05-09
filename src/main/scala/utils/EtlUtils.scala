@@ -40,7 +40,6 @@ object EtlUtils {
 
     val differentFields = schemaTgt.map(field => field.name).filterNot(
       commonFields.toSet)
-
     val commonColumns = commonFields.map(field => col(field))
 
     val filteredDF = df.select(commonColumns: _*)

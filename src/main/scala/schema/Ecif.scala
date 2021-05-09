@@ -3,7 +3,7 @@ package schema
 case class Ecif(
                  orgunit_num: java.lang.Integer,
                  prod_type_code: String,
-                 acct_num:String,
+                 acct_num: String,
                  prod_inst_num: String,
                  party_num: java.lang.Integer,
                  cross_ref_num: String,
@@ -36,7 +36,7 @@ case class Ecif(
                  home_main_postal_code: String,
                  home_main_country_code: java.lang.Integer,
                  home_main_country_short_name: String,
-                 home_main_phone_num:String,
+                 home_main_phone_num: String,
                  lang_id: String,
                  cust1_email_addr: String,
                  processing_date: String

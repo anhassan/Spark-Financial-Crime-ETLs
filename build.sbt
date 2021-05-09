@@ -27,7 +27,7 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.2.0" % "test",
 
 
-// https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc
-    "com.microsoft.sqlserver" % "mssql-jdbc" % "6.1.0.jre7"
+  // https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc
+  "com.microsoft.sqlserver" % "mssql-jdbc" % "6.1.0.jre7"
 
 )
