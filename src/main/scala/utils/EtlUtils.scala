@@ -3,7 +3,6 @@ package utils
 import org.apache.spark.sql.catalyst.ScalaReflection
 import org.apache.spark.sql.functions.{col, lit}
 import org.apache.spark.sql.types.{IntegerType, StructType}
-
 import scala.collection.breakOut
 import org.apache.spark.sql.{DataFrame, Dataset, Encoder, SaveMode, SparkSession}
 
@@ -80,7 +79,9 @@ object EtlUtils {
         Map(
           "url" -> s"jdbc:sqlite:${dbPath}/${db}.db",
           "driver" -> "org.sqlite.JDBC",
-          "dbtable" -> table)).save()
+          "dbtable" -> table)
+      )
+      .save()
   }
 
   def insertInto[T: Encoder : TypeTag](ds: Dataset[T], table: String, db: String,
@@ -92,7 +93,8 @@ object EtlUtils {
         Map(
           "url" -> s"jdbc:sqlite:${dbPath}/${db}.db",
           "driver" -> "org.sqlite.JDBC",
-          "dbtable" -> table)).save()
+          "dbtable" -> table)
+      )
+      .save()
   }
-
 }
