@@ -2,8 +2,11 @@ package utils
 
 import org.apache.spark.sql.catalyst.ScalaReflection
 import org.apache.spark.sql.functions.{col, lit}
-import org.apache.spark.sql.types.StructType
-import org.apache.spark.sql.{DataFrame, Dataset, Encoder, SparkSession}
+import org.apache.spark.sql.types.{IntegerType, StructType}
+
+import scala.collection.breakOut
+import org.apache.spark.sql.{DataFrame, Dataset, Encoder, SaveMode, SparkSession}
+
 import scala.reflect.runtime.universe._
 
 object EtlUtils {
@@ -38,14 +41,58 @@ object EtlUtils {
       }))
       .filterNot(field => field == null)
 
-    val differentFields = schemaTgt.map(field => field.name).filterNot(
+    val differentFieldName = schemaTgt.map(field => field.name).filterNot(
       commonFields.toSet)
+    val differentField = schemaTgt.filter(field => differentFieldName.contains(field.name))
+
     val commonColumns = commonFields.map(field => col(field))
 
     val filteredDF = df.select(commonColumns: _*)
-    differentFields.foldLeft(filteredDF) { (filDf, field) =>
-      filDf.withColumn(field, lit(null))
+    differentField.foldLeft(filteredDF) { (filDf, field) =>
+      filDf.withColumn(field.name, lit(null).cast(field.dataType))
     }.as[T]
+  }
+
+  def loadTable(table: String, db: String, dbPath: String = "src/main/resources"): DataFrame = {
+    sparkSession.read
+      .format("jdbc")
+      .options(
+        Map(
+          "url" -> s"jdbc:sqlite:${dbPath}/${db}.db",
+          "driver" -> "org.sqlite.JDBC",
+          "dbtable" -> table)
+      ).load()
+  }
+
+  def loadFlatFile(file: String, filePath: String = "src/main/resources"): DataFrame = {
+    sparkSession.read
+      .format("csv").
+      option("header", "true").
+      load(s"${filePath}/${file}.csv")
+  }
+
+  def appendInto[T: Encoder : TypeTag](ds: Dataset[T], table: String, db: String,
+                                       dbPath: String = "src/main/resources"): Unit = {
+    ds.write
+      .format("jdbc")
+      .mode(SaveMode.Append)
+      .options(
+        Map(
+          "url" -> s"jdbc:sqlite:${dbPath}/${db}.db",
+          "driver" -> "org.sqlite.JDBC",
+          "dbtable" -> table)).save()
+  }
+
+  def insertInto[T: Encoder : TypeTag](ds: Dataset[T], table: String, db: String,
+                                       dbPath: String = "src/main/resources"): Unit = {
+    ds.write
+      .format("jdbc")
+      .mode(SaveMode.Overwrite)
+      .options(
+        Map(
+          "url" -> s"jdbc:sqlite:${dbPath}/${db}.db",
+          "driver" -> "org.sqlite.JDBC",
+          "dbtable" -> table)).save()
   }
 
 }

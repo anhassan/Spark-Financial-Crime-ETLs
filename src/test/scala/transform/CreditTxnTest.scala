@@ -22,6 +22,7 @@ class CreditTxnTest extends AnyFunSuite {
 
   // Getting the default data
   val ecifData = Map[String, String](
+    "orgunit_num" -> "ORGUNIT_NUM",
     "prod_type_code" -> "INVT",
     "acct_num" -> "ACCT_NUM",
     "aml_party_id" -> "AML_ID",
@@ -65,6 +66,9 @@ class CreditTxnTest extends AnyFunSuite {
   val creditTxnEmpty = sparkSession.emptyDataset[CreditTxn]
   val ecifTxnEmpty = sparkSession.emptyDataset[Ecif]
 
+  // Tests
+
+  // Testing the join conditions
   test("join_condition") {
 
     val creditTxnUpdated = acquire[CreditTxn](dataToDF(creditTxnData).union(dataToDF(creditTxnData)
@@ -78,7 +82,8 @@ class CreditTxnTest extends AnyFunSuite {
     ))
   }
 
-  test("remaining_fields") {
+  // Testing the logic for all the fields
+  test("fields") {
 
     val result = CreditTxnFraud.transform(creditTxn, ecifTxn, processingDate)
     val resultDS = acquire[FraudTxn](result).head
@@ -100,7 +105,6 @@ class CreditTxnTest extends AnyFunSuite {
     resultDS.acct1_boa_transit_num should be("ORIG_BOA_TRANSIT")
     resultDS.cust1_phone_num should be("AREA_CODEPHONE_NUMEXT_NUM")
     resultDS.cust1_pers_first_name should be("FIRST_NAME")
-    resultDS.cust1_pers_last_name should be("LAST_NAME")
     resultDS.cust1_org_legal_name should be("LEGAL_1")
     resultDS.cust1_pers_birth_date should be("BIRTH_DATE")
     resultDS.cust1_addr_country_code should be("CNTRY_SHORT")

@@ -1,0 +1,2 @@
+branch_id_of_acct,univ_acct_num,fi_code,channel_type_code,txn_date,txn_time,txn_posting_date,txn_ref_num,txn_code,txn_cat_code,currency_code,txn_total_amt,txn_cash_amount,cr_dr_ind,cash_code,orig_boa_transit_num,processing_date
+BAID,ACC765,FIC,CTC,1/1/2019,12,1-Mar,TRF89,TC4,TCC2,CAD,1500,2000,CDI23,DB,TNB,31/1/2019

@@ -23,8 +23,15 @@ libraryDependencies ++= Seq(
   "org.apache.logging.log4j" % "log4j-core" % "2.4.1",
   // postgres for DB connectivity
   "org.postgresql" % "postgresql" % postgresVersion,
-  "org.scalatest" %% "scalatest-funsuite" % "3.2.8" % Test,
+  // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
+  "org.xerial" % "sqlite-jdbc" % "3.28.0",
+  // https://mvnrepository.com/artifact/com.typesafe/config
+  "com.typesafe" % "config" % "1.4.0",
+
+
+"org.scalatest" %% "scalatest-funsuite" % "3.2.8" % Test,
   "org.scalatest" %% "scalatest" % "3.2.0" % "test",
+
 
 
   // https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc

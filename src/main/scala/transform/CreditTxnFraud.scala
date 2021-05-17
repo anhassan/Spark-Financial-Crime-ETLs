@@ -9,7 +9,7 @@ object CreditTxnFraud {
     import creditTxn.sparkSession.implicits._
 
     ecif.drop("processing_date")
-      .where('orgunit_num.isNull and 'prod_type_code === "INVT")
+      .where('orgunit_num.isNotNull and 'prod_type_code === "INVT")
       .join(creditTxn, 'univ_acct_num === 'acct_num, "right")
       .withColumn("bank_id", coalesce('fi_code, lit("0000")))
       .withColumn("aml_party_id", coalesce('party_num,
